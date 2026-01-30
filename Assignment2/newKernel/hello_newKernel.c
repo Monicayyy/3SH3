@@ -12,12 +12,12 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
-#include <linux/proc_fs.h>
-#include <linux/uaccess.h>
+#include <linux/proc_fs.h> 
+#include <linux/uaccess.h> //what kernel code uses to safely copy data to a user-space buffer
 
-#define BUFFER_SIZE 128
+#define BUFFER_SIZE 128 //message will fit in a small local buffer
 
-#define PROC_NAME "hello"
+#define PROC_NAME "hello" //process name is hello
 #define MESSAGE "Hello World\n"
 
 /**
@@ -25,6 +25,9 @@
  */
 ssize_t proc_read(struct file *file, char *buf, size_t count, loff_t *pos);
 
+/*
+"when someone reads /proc/hello, call function proc_read()"
+*/
 static const struct proc_ops my_proc_ops = {
         .proc_read = proc_read,
 };
@@ -33,17 +36,20 @@ static const struct proc_ops my_proc_ops = {
 int proc_init(void)
 {
 
-        // creates the /proc/hello entry
+        // creates the /proc/hello entry when run sudo insmod hello_newKernel.ko
         // the following function call is a wrapper for
         // proc_create_data() passing NULL as the last argument
-        proc_create(PROC_NAME, 0, NULL, &my_proc_ops);
+        proc_create(PROC_NAME, 0, NULL, &my_proc_ops); //creates the process hello and attaches the read handler (proc_read) to it
 
         printk(KERN_INFO "/proc/%s created\n", PROC_NAME);
 
 	return 0;
 }
 
-/* This function is called when the module is removed. */
+/* 
+This function is called when the module is removed. 
+sudo rmmod hello_newKernel
+*/
 void proc_exit(void) {
 
         // removes the /proc/hello entry
@@ -66,6 +72,8 @@ void proc_exit(void) {
  * buf: buffer in user space
  * count:
  * pos:
+
+ when run cat /proc/hello
  */
 ssize_t proc_read(struct file *file, char __user *usr_buf, size_t count, loff_t *pos)
 {
@@ -73,6 +81,7 @@ ssize_t proc_read(struct file *file, char __user *usr_buf, size_t count, loff_t 
         char buffer[BUFFER_SIZE];
         static int completed = 0;
 
+		//if end of file, tells cat there is no more data. 
         if (completed) {
                 completed = 0;
                 return 0;
@@ -80,12 +89,12 @@ ssize_t proc_read(struct file *file, char __user *usr_buf, size_t count, loff_t 
 
         completed = 1;
 
-        rv = sprintf(buffer, "Hello World\n");
+        rv = sprintf(buffer, "Hello World\n"); //builds the string in a kernel buffer
 
         // copies the contents of buffer to userspace usr_buf
         copy_to_user(usr_buf, buffer, rv);
 
-        return rv;
+        return rv; //returns the number of bytes copied
 }
 
 
