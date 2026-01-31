@@ -1,0 +1,1 @@
+Both group members, Monica Fu (fuz32) and Chin wing Wai (waic6) worked on the logic and implementation of assignment 1. 
