@@ -1,1 +1,1 @@
-savedcmd_modules.order := {   echo hello_newKernel.o; :; } > modules.order
+savedcmd_modules.order := {   echo seconds.o; :; } > modules.order
