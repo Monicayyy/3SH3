@@ -28,7 +28,7 @@ Kernel version (uname -r)
 //track the start time of the module 
 static unsigned long start_jiffies;
 
-
+//declaring functions
 int proc_init(void);
 ssize_t proc_read(struct file *file, char __user *usr_buf, size_t count, loff_t *pos);
 void proc_exit(void);
@@ -47,7 +47,7 @@ when insmod is called:
 */
 int proc_init(void)
 {
-
+		//tracking the start time of the module 
         start_jiffies = jiffies;
         proc_create(PROC_NAME, 0, NULL, &my_proc_ops);
 
@@ -59,7 +59,7 @@ int proc_init(void)
 /* This function is called when the module is removed. */
 void proc_exit(void) {
 
-        // removes the /proc/seconds
+        //removes the /proc/seconds module
         remove_proc_entry(PROC_NAME, NULL);
 
         printk( KERN_INFO "/proc/%s removed\n", PROC_NAME);
@@ -93,8 +93,10 @@ ssize_t proc_read(struct file *file, char __user *usr_buf, size_t count, loff_t 
 
         completed = 1;
 
+		//time elapsed = total ticks / ticks per second
         unsigned long time_elapsed = (jiffies - start_jiffies) / HZ;
-        rv = snprintf(buffer, BUFFER_SIZE, "Seconds elapsed: %lu\n", time_elapsed);
+		
+        rv = sprintf(buffer, "Seconds elapsed: %lu\n", time_elapsed);
 
         // copies the contents of buffer to userspace usr_buf
         copy_to_user(usr_buf, buffer, rv);
