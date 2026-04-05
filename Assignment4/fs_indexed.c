@@ -370,13 +370,11 @@ void printFreeBlocks(void)
     printf("Free Blocks (%d): ", fs.freeBlockCount);
 
     while (current != NULL) {
-        printf("[%d]", current->blockNumber);
-        if (current->next != NULL) {
-            printf(" -> ");
-        }
+        printf("[%d] -> ", current->blockNumber);
         current = current->next;
     }
-    printf("\n");
+
+    printf("NULL\n");
 }
 
 void destroyFS(void)
