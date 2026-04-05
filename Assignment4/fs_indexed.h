@@ -61,8 +61,11 @@ typedef struct FileSystem {
     // 5.number of files created
     int fileCount;
 
-    //quick find amount of free blocks
+    // quick find amount of free blocks
     int freeBlockCount;
+
+    // prevent using same fibID
+    int nextFibID;
 } FileSystem;
 
 // Global file system instance

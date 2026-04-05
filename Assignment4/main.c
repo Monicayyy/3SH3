@@ -3,35 +3,38 @@
 int main(void)
 {
     initFS();
-    printf("\n");
-
-    printFreeBlocks();
-    printf("\n");
 
     createFile("alpha.txt", 3072);
-    listFiles();
-    printFreeBlocks();
-    printf("\n");
-
     createFile("beta.txt", 5120);
-    listFiles();
-    printFreeBlocks();
     printf("\n");
 
-    createFile("gamma.txt", 1500);
     listFiles();
-    printFreeBlocks();
     printf("\n");
-
-    deleteFile("beta.txt");
-    listFiles();
     printFreeBlocks();
-    printf("\n");
 
     deleteFile("alpha.txt");
-    listFiles();
-    printFreeBlocks();
     printf("\n");
+
+    listFiles();
+    printf("\n");
+    printFreeBlocks();
+
+    createFile("gamma.txt", 4096);
+    createFile("delta.txt", 8192);
+    printf("\n");
+
+    listFiles();
+    printf("\n");
+    printFreeBlocks();
+
+    deleteFile("beta.txt");
+    deleteFile("gamma.txt");
+    deleteFile("delta.txt");
+    printf("\n");
+
+    listFiles();
+    printf("\n");
+    printFreeBlocks();
 
     destroyFS();
     return 0;
